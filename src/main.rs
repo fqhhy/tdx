@@ -16,6 +16,12 @@ pub const PACK3: &[u8] = &[
     0xc9, 0xcc, 0xbd, 0xf0, 0xd7, 0xea, 0x00, 0x00, 0x00, 0x02,
 ];
 
+const KLINE_PACK: &[u8] = &[
+    0x0c, 0x01, 0x08, 0x64, 0x01, 0x01, 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x05, 0x00, 0x00, 0x30, 0x30,
+    0x30, 0x30, 0x30, 0x31, 0x09, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+];
+
 fn main() -> std::io::Result<()> {
     match TcpStream::connect(("115.238.56.198", 7709)) {
         Ok(mut socket) => {
@@ -34,7 +40,6 @@ fn main() -> std::io::Result<()> {
             socket.read_exact(&mut buf)?;
             let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
 
-
             socket.write_all(&PACK2)?;
             let mut head = [0u8; 16];
             let head_size = socket.read(&mut head)?;
@@ -43,7 +48,6 @@ fn main() -> std::io::Result<()> {
             socket.read_exact(&mut buf)?;
             let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
 
-
             socket.write_all(&PACK3)?;
             let mut head = [0u8; 16];
             let head_size = socket.read(&mut head)?;
@@ -51,9 +55,31 @@ fn main() -> std::io::Result<()> {
             let mut buf = vec![0; deflate_size as usize];
             socket.read_exact(&mut buf)?;
             let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
-            
+
             println!("Connected to server");
 
+            let mut arr = [0; KLINE_PACK.len()];
+            arr.copy_from_slice(KLINE_PACK);
+
+            let market: u16 = 0;
+            let code: &str = "000001";
+            let category: u16 = 9;
+            let start: u16 = 0;
+            let count: u16 = 3;
+            arr[12..14].copy_from_slice(&market.to_le_bytes());
+            arr[14..20].copy_from_slice(code.as_bytes());
+            arr[20..22].copy_from_slice(&category.to_le_bytes());
+            arr[24..26].copy_from_slice(&start.to_le_bytes());
+            arr[26..28].copy_from_slice(&count.to_le_bytes());
+
+            socket.write_all(&arr)?;
+            let mut head = [0u8; 16];
+            let head_size = socket.read(&mut head)?;
+            let deflate_size = u16::from_le_bytes([head[12], head[13]]); // 响应信息中的待解压长度
+            let mut buf = vec![0; deflate_size as usize];
+            socket.read_exact(&mut buf)?;
+            let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
+            println!("Received data: {:?}", buf);
         }
         Err(_) => {}
     };
