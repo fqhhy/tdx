@@ -104,9 +104,20 @@ fn main() -> std::io::Result<()> {
             socket.read_exact(&mut buf)?;
             let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
             println!("inflate_size: {}", inflate_size);
+
+
+            let arr = [0xc, 0xfe, 0x4, 0xa, 0x0, 0x1, 0x14, 0x0, 0x14, 0x0, 0x4b, 0x5, 0x6, 0x0, 0xe, 0x0, 0x00, 0x0, 0x21, 0x0, 0x1, 0x0, 0x5, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0];
+            socket.write_all(&arr)?;
+             let mut head = [0u8; 16];
+            let head_size = socket.read(&mut head)?;
+            let deflate_size = u16::from_le_bytes([head[12], head[13]]); // 响应信息中的待解压长度
+            println!("deflate_size: {}", deflate_size);
+            let mut buf = vec![0; deflate_size as usize];
+            socket.read_exact(&mut buf)?;
+
+
         }
         Err(_) => {}
     };
-
     Ok(())
 }
