@@ -23,7 +23,9 @@ const KLINE_PACK: &[u8] = &[
 ];
 
 fn main() -> std::io::Result<()> {
-    match TcpStream::connect(("115.238.56.198", 7709)) {
+    // 115.238.56.198
+    // 
+    match TcpStream::connect(("82.156.174.84", 7709)) {
         Ok(mut socket) => {
             socket
                 .set_read_timeout(Some(Duration::from_secs(5)))
@@ -80,6 +82,28 @@ fn main() -> std::io::Result<()> {
             socket.read_exact(&mut buf)?;
             let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
             println!("Received data: {:?}", buf);
+
+
+            let arr = [0xc, 0x25, 0x8, 0x0, 0x1, 0x1, 0x12, 0x0, 0x12, 0x0, 0xc6, 0xf, 0xce, 0x25, 0x35, 0x1, 0x1, 0x0, 0x36, 0x30, 0x30, 0x30, 0x30, 0x34, 0x0, 0x0, 0x8, 0x7];
+            socket.write_all(&arr)?;
+             let mut head = [0u8; 16];
+            let head_size = socket.read(&mut head)?;
+            let deflate_size = u16::from_le_bytes([head[12], head[13]]); // 响应信息中的待解压长度
+            println!("deflate_size: {}", deflate_size);
+            let mut buf = vec![0; deflate_size as usize];
+            socket.read_exact(&mut buf)?;
+            let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
+            println!("inflate_size: {}", inflate_size);
+            let arr = [0xc, 0x25, 0x8, 0x1, 0x1, 0x1, 0x12, 0x0, 0x12, 0x0, 0xc6, 0xf, 0xce, 0x25, 0x35, 0x1, 0x1, 0x0, 0x36, 0x30, 0x30, 0x30, 0x30, 0x34, 0x8, 0x7, 0x8, 0x7];
+            socket.write_all(&arr)?;
+             let mut head = [0u8; 16];
+            let head_size = socket.read(&mut head)?;
+            let deflate_size = u16::from_le_bytes([head[12], head[13]]); // 响应信息中的待解压长度
+            println!("deflate_size: {}", deflate_size);
+            let mut buf = vec![0; deflate_size as usize];
+            socket.read_exact(&mut buf)?;
+            let inflate_size = u16::from_le_bytes([head[14], head[15]]); // 响应信息中的解压后长度
+            println!("inflate_size: {}", inflate_size);
         }
         Err(_) => {}
     };
