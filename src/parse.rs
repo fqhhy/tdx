@@ -143,49 +143,51 @@ fn price_2(arr: &[u8], pos: usize) -> i32 {
 
 pub fn parse_sort_hq(v: &[u8]) {
     let mut pos = 2;
+    println!("{:?}",v);
+    
     let count = u16::from_le_bytes([v[pos], v[pos + 1]]);
     println!("记录数: {}\n", count);
     pos += 2;
 
     for i in 0..count {
         // 市场代码 (1字节)
+
         let market = v[pos];
         pos += 1;
 
         // 股票代码 (6字节)
+
         let code = String::from_utf8_lossy(&v[pos..pos + 6]);
         println!("{}", code);
         pos += 6;
 
+        let flag =  [v[pos], v[pos+1]]; 
+
         // 115 ,13 
-        test_parse(v, pos);
-        let test = vol_amount( u16::from_le_bytes([v[pos], v[pos + 1]]) as i32) ;
-        println!("test {}", test);
         pos += 2;
         let xianjia = price(v, &mut pos);
-        println!("现价: {} ", xianjia as f64 / 100.0);
+        print!("现价: {} ", xianjia as f64 / 100.0);
         let zhangdie = price(v, &mut pos);
-        println!("涨跌: {} ", -zhangdie as f64 / 100.0);
+        print!("涨跌: {} ", -zhangdie as f64 / 100.0);
         let open = xianjia + price(v, &mut pos);
-        println!("今开: {} ", open as f64 / 100.0);
+        print!("今开: {} ", open as f64 / 100.0);
         let high = xianjia + price(v, &mut pos);
-        println!("最高: {} ", high as f64 / 100.0);
+        print!("最高: {} ", high as f64 / 100.0);
         let low = xianjia + price(v, &mut pos);
-        println!("最低: {} ,", low as f64 / 100.0);
+        print!("最低: {} ,", low as f64 / 100.0);
 
         let a = pos;
         let val = price(v, &mut pos);
-        println!("next: {} , {:?}", val, &v[a..pos]);
-        println!("test:{}", vol_amount(val));
+        print!("???: {} , {:?}", val, &v[a..pos]);
 
         let a = pos;
-        println!("买价？？: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("买价？？: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
-        println!("总量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("现量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("总量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        let a: usize = pos;
+        print!("现量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
 
-        println!(
+        print!(
             "总金额: {} , {:?}",
             f32::from_le_bytes([v[pos], v[pos + 1], v[pos + 2], v[pos + 3]]),
             &v[pos..pos + 4]
@@ -193,58 +195,26 @@ pub fn parse_sort_hq(v: &[u8]) {
         pos += 4;
 
         let a = pos;
-        println!("内盘: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("外盘: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("内盘: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        let a: usize = pos;
+        print!("外盘: {} , {:?}", price(v, &mut pos), &v[a..pos]);
 
         let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
-        println!("开盘金额（百）: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("开盘金额（百）: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
-        println!("差值: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("差值: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
-        println!("买量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
+        print!("买量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
         println!("卖量？？: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-         let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-
-        pos=pos+10;
-
-         let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-         let a = pos;
-        println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-         let a = pos;
-          println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-           let a = pos;
-          println!("未知: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        // for i in 0..120{
-        //     println!("pares:{:?}  {}", &v[pos+i..pos+i+4], price_2(v, pos+i));
-        // }
-
-        break;
+        
+        // 在 v中 查找和 flag一样值的位置，从 pos开始
+        let end_pos = v[pos..].windows(2).position(|w| w[0] == flag[0] && w[1] == flag[1]).unwrap();
+        pos = pos + end_pos + 2;
     }
 }
 
