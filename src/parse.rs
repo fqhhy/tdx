@@ -143,8 +143,8 @@ fn _price_2(arr: &[u8], pos: usize) -> i32 {
 
 pub fn parse_sort_hq(v: &[u8]) {
     let mut pos = 2;
-    println!("{:?}",v);
-    
+    println!("{:?}", v);
+
     let count = u16::from_le_bytes([v[pos], v[pos + 1]]);
     println!("记录数: {}\n", count);
     pos += 2;
@@ -161,9 +161,9 @@ pub fn parse_sort_hq(v: &[u8]) {
         println!("{}", code);
         pos += 6;
 
-        let flag =  [v[pos], v[pos+1]]; 
+        let flag = [v[pos], v[pos + 1]];
 
-        // 115 ,13 
+        // 115 ,13
         pos += 2;
         let xianjia = price(v, &mut pos);
         print!("现价: {} ", xianjia as f64 / 100.0);
@@ -211,14 +211,17 @@ pub fn parse_sort_hq(v: &[u8]) {
         print!("买量: {} , {:?}", price(v, &mut pos), &v[a..pos]);
         let a = pos;
         println!("卖量？？: {} , {:?}", price(v, &mut pos), &v[a..pos]);
-        
+
         // 在 v中 查找和 flag一样值的位置，从 pos开始
-        let end_pos = v[pos..].windows(2).position(|w| w[0] == flag[0] && w[1] == flag[1]).unwrap();
+        let end_pos = v[pos..]
+            .windows(2)
+            .position(|w| w[0] == flag[0] && w[1] == flag[1])
+            .unwrap();
         pos = pos + end_pos + 2;
     }
 }
 
-fn test_parse(v: &[u8],  pos: &mut usize) {
+fn test_parse(v: &[u8], pos: &mut usize) {
     println!("-------------");
     println!(
         "next u16: {} , {:?}",
@@ -230,17 +233,22 @@ fn test_parse(v: &[u8],  pos: &mut usize) {
         i32::from_le_bytes([v[*pos], v[*pos + 1], v[*pos + 2], v[*pos + 3]]),
         &v[*pos..*pos + 4]
     );
-    println!(
-        "next f32: {} , {:?}",
-        f32::from_le_bytes([v[*pos], v[*pos + 1], v[*pos + 2], v[*pos + 3]]),
-        &v[*pos..*pos + 4]
-    );
-   let a = *pos;
-   let price = price(v, pos);
+    // println!(
+    //     "next f32: {} , {:?}",
+    //     f32::from_le_bytes([v[*pos], v[*pos + 1], v[*pos + 2], v[*pos + 3]]),
+    //     &v[*pos..*pos + 4]
+    // );
+    // println!(
+    //     "next f64: {} , {:?}",
+    //     f64::from_le_bytes([v[*pos], v[*pos + 1], v[*pos + 2], v[*pos + 3], v[*pos + 4], v[*pos + 5], v[*pos + 6], v[*pos + 7]]),
+    //     &v[*pos..*pos + 8]
+    // );
+    let a = *pos;
+    let price = price(v, pos);
     println!("parse price: {} , {:?}", price, &v[a..*pos]);
 }
 
-fn _test_parse2(v: &[u8],  pos: usize) {
+fn _test_parse2(v: &[u8], pos: usize) {
     println!("-------------");
     println!(
         "next u16: {} , {:?}",
@@ -257,44 +265,65 @@ fn _test_parse2(v: &[u8],  pos: usize) {
         f32::from_le_bytes([v[pos], v[pos + 1], v[pos + 2], v[pos + 3]]),
         &v[pos..pos + 4]
     );
-     println!("parse price: {} , {:?}", _price_2(v, pos), &v[pos..pos+4]);
+    println!("parse price: {} , {:?}", _price_2(v, pos), &v[pos..pos + 4]);
 }
 
-pub fn parese_pankou(v: &[u8],pos:&mut usize) {
-    let _count = u16::from_le_bytes([v[0], v[1]]);
+pub fn parese_pankou(v: &[u8], pos: &mut usize) {
+
+    // 打印出v的  acsii 码代码的字符
+
+    println!("ASCII values:");
     
-        println!("{:?}", &v[0..500]);
+    println!("{}", String::from_utf8_lossy(&v[..3000]));
+    // println!("{}", String::from_utf8_lossy(v));
 
     // for i in 2..100 {
     //     test_parse2(v, i as usize);
     // }
     // println!("{:?}", datetime(&v[pos..], 0));
 
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
-    test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+    // test_parse(v, pos);
+}
 
+fn parse_pankou_file(file:&str){
+// 读取 sz000007-20260316.txt 文件内容到字节数组,文件内容是 48, 117, 0, 0, 111, 206, 字符串，要转换一下
+        let buf = std::fs::read(file).expect("Failed to read file");
+        let mut pos = 8;
+        // 待解压长度
+        let deflate_size = u32::from_le_bytes([buf[pos], buf[pos + 1], buf[pos + 2], buf[pos + 3]]); // 响应信息中的待解压长度
+        pos += 8;
+        let inflate_size = u32::from_le_bytes([buf[pos], buf[pos + 1], buf[pos + 2], buf[pos + 3]]); // 响应信息中的待解压长度
+        pos = buf.len() - deflate_size as usize;
 
+        let mut decompressed = vec![0u8; inflate_size as usize];
+        let (result, rc) =
+            zlib_rs::decompress_slice(&mut decompressed, &buf[pos..], zlib_rs::InflateConfig::default());
+        println!("文件大小: {} 字节", result.len());
+        // result 保存到文件
+        std::fs::write("decompressed.img", &result).expect("Failed to write file");
+        parese_pankou(&result, &mut 0);
 }
 
 
@@ -303,10 +332,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_paese_pankou(){
-        // 读取 sz000007-20260316.txt 文件内容到字节数组,文件内容是 48, 117, 0, 0, 111, 206, 字符串，要转换一下
-        let buf = std::fs::read("../../sz000001-20260316.img").expect("Failed to read file");
-        parese_pankou(&buf, &mut 300);
+    fn test_parse_pankou() {
+        // parse_pankou_file("../../sz000001-20260313.img");
+        parse_pankou_file("../../sz000001-20260317.img");
     }
 
     #[test]
@@ -331,10 +359,8 @@ mod tests {
             0, //
             233, 24, // -1577
             186, 151, //
-            4, 0, 150, 9, 0, 0, 12, 0, 0, 28, 48, 73, 67,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-             116, 235, 35, 62,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            4, 0, 150, 9, 0, 0, 12, 0, 0, 28, 48, 73, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116,
+            235, 35, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 115, 13, //
             //
             0, 51, 48, 48, 49, 56, 53, 59, 17, 165, 6, 198, 1, 127, 0, 127, 132, 174, 207, 14, 188,
