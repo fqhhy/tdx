@@ -305,7 +305,7 @@ mod tests {
     #[test]
     fn test_paese_pankou(){
         // 读取 sz000007-20260316.txt 文件内容到字节数组,文件内容是 48, 117, 0, 0, 111, 206, 字符串，要转换一下
-        let buf = std::fs::read("/home/l/code/xyq/sz000007-20260316.txt").expect("Failed to read file");
+        let buf = std::fs::read("../../sz000001-20260316.img").expect("Failed to read file");
         parese_pankou(&buf, &mut 300);
     }
 
